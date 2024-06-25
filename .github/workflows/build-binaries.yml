@@ -84,6 +84,7 @@ jobs:
       - name: Zip artifact on Windows
         run: |
           cd target/${{ matrix.rust_target }}/release
+          dir
           Compress-Archive -Path poseidon.dll -DestinationPath libposeidon-${{ env.OS_NAME }}-${{ matrix.arch }}-${{ env.VERSION }}.zip
         if: matrix.os == 'windows-latest'
         shell: pwsh
