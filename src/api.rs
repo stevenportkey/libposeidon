@@ -4,6 +4,7 @@ use anyhow::Context;
 use crate::poseidon_bn254;
 use crate::utils::write_to_buffer;
 use crate::errors::ParseError;
+use crate::returncodes::ReturnCodes;
 
 #[no_mangle]
 pub extern "C" fn poseidon_hash(
@@ -17,9 +18,9 @@ pub extern "C" fn poseidon_hash(
             Ok(result) => {
                 write_to_buffer(&result, buf, max_len)
             }
-            Err(_) => -1,
+            Err(_) => ReturnCodes::InvalidInput as i32,
         },
-        _ => -1,
+        _ => ReturnCodes::InvalidInput as i32,
     }
 }
 
@@ -36,9 +37,9 @@ fn parse_inputs(inputs: &Vec<String>) -> anyhow::Result<Vec<ark_bn254::Fr>> {
 }
 
 fn do_poseidon_hash(input: &str) -> anyhow::Result<String> {
-    let inputs = serde_json::from_str::<Vec<String>>(input).context("")?;
-    let fr_vector = parse_inputs(&inputs).context("")?;
-    let h = poseidon_bn254::hash_scalars(fr_vector).context("")?;
+    let inputs = serde_json::from_str::<Vec<String>>(input).context("decode json")?;
+    let fr_vector = parse_inputs(&inputs).context("parse fr")?;
+    let h = poseidon_bn254::hash_scalars(fr_vector).context("hash poseidon")?;
     Ok(h.to_string())
 }
 
