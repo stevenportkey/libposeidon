@@ -320,7 +320,7 @@ mod test {
         keyless::{pack_bytes_to_scalars, BYTES_PACKED_PER_SCALAR, MAX_NUM_INPUT_BYTES},
         MAX_NUM_INPUT_SCALARS,
     };
-    use ark_ff::{BigInteger, One, PrimeField, Zero, Fp};
+    use ark_ff::{BigInteger, One, PrimeField, Zero};
     use num_bigint::BigUint;
     use std::str::FromStr;
 
